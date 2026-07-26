@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const User = require("../models/user");
 const Listing = require("../models/listing");
 const SearchLog = require("../models/searchLog");
@@ -139,13 +140,17 @@ module.exports.index = async (req, res, next) => {
 
     // Fetch listings with populated reviews
     let allListings = [];
-    try {
-      allListings = await Listing.find(filter)
-        .populate({ path: 'reviews', populate: { path: 'author' } })
-        .lean();
-    } catch (dbErr) {
-      console.warn('⚠️ Listing fetch warning (DB not reachable):', dbErr.message || dbErr);
-      allListings = [];
+    if (mongoose.connection.readyState === 1) {
+      try {
+        allListings = await Listing.find(filter)
+          .populate({ path: 'reviews', populate: { path: 'author' } })
+          .lean();
+      } catch (dbErr) {
+        console.warn('⚠️ Listing fetch warning (DB not reachable):', dbErr.message || dbErr);
+        allListings = [];
+      }
+    } else {
+      console.warn('ℹ️ MongoDB not connected. Displaying welcome page.');
     }
 
     // Add badges to each listing
@@ -154,7 +159,7 @@ module.exports.index = async (req, res, next) => {
     });
 
     // Log search queries asynchronously (don't wait)
-    if (searchQuery) {
+    if (searchQuery && mongoose.connection.readyState === 1) {
       SearchLog.create({
         query: searchQuery,
         resultsCount: allListings.length,

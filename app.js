@@ -34,6 +34,7 @@ const socketIo = require("socket.io");
 const server = http.createServer(app);
 const io = socketIo(server);
 const mongoose = require("mongoose");
+mongoose.set('bufferCommands', false);
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
