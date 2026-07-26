@@ -64,7 +64,17 @@ if (!process.env.ATLAS_DB_URL) {
     console.warn("⚠️ ATLAS_DB_URL environment variable is not set! Using local MongoDB fallback.");
     console.warn("ℹ️ Make sure you have MongoDB running locally or set ATLAS_DB_URL in .env file.");
 }
-const dbUrl = process.env.ATLAS_DB_URL || MONGO_URL;
+const isPlaceholderUrl = (url) => {
+    if (!url) return true;
+    return url.includes('<username>') || url.includes('<password>') || url.includes('cluster.mongodb.net');
+};
+
+const dbUrl = (!isPlaceholderUrl(process.env.ATLAS_DB_URL)) ? process.env.ATLAS_DB_URL : MONGO_URL;
+
+if (isPlaceholderUrl(process.env.ATLAS_DB_URL) && process.env.ATLAS_DB_URL) {
+    console.warn("⚠️ ATLAS_DB_URL contains placeholder text (e.g. cluster.mongodb.net or <username>).");
+    console.warn("ℹ️ Replace <username>, <password>, and cluster name with your actual MongoDB Atlas connection string.");
+}
 
 // Check for session secret
 if (!process.env.SECRET) {
@@ -80,6 +90,10 @@ main()
         console.log(err);
     });
 async function main() {
+    if (isPlaceholderUrl(process.env.ATLAS_DB_URL) && process.env.NODE_ENV === 'production') {
+        console.warn("⚠️ Skipping MongoDB Atlas connection (placeholder ATLAS_DB_URL detected).");
+        return;
+    }
     try {
         await mongoose.connect(dbUrl, {
             ssl: process.env.ATLAS_DB_URL ? true : false, // Only use SSL for Atlas connections
@@ -96,7 +110,7 @@ async function main() {
         console.log('Badge system initialized✅');
     } catch (error) {
         console.error('⚠️ MongoDB connection error:', error.message || error);
-        console.warn('ℹ️ Please set ATLAS_DB_URL in your Environment Variables to connect to a live database.');
+        console.warn('ℹ️ Please set a valid ATLAS_DB_URL in your Environment Variables to connect to a live database.');
     }
 }
 
@@ -179,7 +193,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 let store;
-if (process.env.ATLAS_DB_URL) {
+if (process.env.ATLAS_DB_URL && !isPlaceholderUrl(process.env.ATLAS_DB_URL)) {
     try {
         store = MongoStore.create({
             mongoUrl: dbUrl,
