@@ -94,8 +94,8 @@ async function main() {
         await BadgeDefinition.initializeDefaults();
         console.log('Badge system initialized✅');
     } catch (error) {
-        console.error('MongoDB connection error:', error);
-        process.exit(1);
+        console.error('⚠️ MongoDB connection error:', error.message || error);
+        console.warn('ℹ️ Please set ATLAS_DB_URL in your Environment Variables to connect to a live database.');
     }
 }
 
@@ -422,7 +422,11 @@ const { seedListings } = require('./init/data');
 const PORT = process.env.PORT || 8080;
 
 server.listen(PORT, async () => {
-    await seedListings();
+    try {
+        await seedListings();
+    } catch (e) {
+        console.warn('⚠️ Seeding skipped (Database not reachable):', e.message || e);
+    }
     console.log(`Server is running on port ${PORT}`);
     console.log(`Visit: http://localhost:${PORT}/listings`);
     console.log("Socket.io server ready for real-time notifications ⚡");
