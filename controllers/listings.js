@@ -138,9 +138,15 @@ module.exports.index = async (req, res, next) => {
     }
 
     // Fetch listings with populated reviews
-    const allListings = await Listing.find(filter)
-      .populate({ path: 'reviews', populate: { path: 'author' } })
-      .lean();
+    let allListings = [];
+    try {
+      allListings = await Listing.find(filter)
+        .populate({ path: 'reviews', populate: { path: 'author' } })
+        .lean();
+    } catch (dbErr) {
+      console.warn('⚠️ Listing fetch warning (DB not reachable):', dbErr.message || dbErr);
+      allListings = [];
+    }
 
     // Add badges to each listing
     allListings.forEach(listing => {

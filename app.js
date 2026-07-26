@@ -177,20 +177,27 @@ if (process.env.NODE_ENV !== "production") {
     });
 }
 
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    crypto: {
-        secret: process.env.SECRET,
-    },
-    touchAfter: 24 * 3600,
-});
+let store;
+if (process.env.ATLAS_DB_URL) {
+    try {
+        store = MongoStore.create({
+            mongoUrl: dbUrl,
+            crypto: {
+                secret: process.env.SECRET,
+            },
+            touchAfter: 24 * 3600,
+        });
 
-store.on("error", (err) => {
-    console.log("ERROR in MONGO SESSION STORE", err);
-});
+        store.on("error", (err) => {
+            console.log("ERROR in MONGO SESSION STORE", err);
+        });
+    } catch (e) {
+        console.warn("⚠️ MongoStore fallback to MemoryStore:", e.message);
+    }
+}
 
 const sessionOption = {
-    store,
+    ...(store ? { store } : {}),
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
