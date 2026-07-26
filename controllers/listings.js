@@ -181,7 +181,9 @@ module.exports.index = async (req, res, next) => {
     });
   } catch (error) {
     console.error('Error in index controller:', error);
-    next(error);
+    if (!res.headersSent) {
+      next(error);
+    }
   }
 };
 
