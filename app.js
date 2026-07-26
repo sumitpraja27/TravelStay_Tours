@@ -1,6 +1,4 @@
-if (process.env.NODE_ENV != "production") {
-    require("dotenv").config({ quiet: true });
-}
+require("dotenv").config({ quiet: true });
 
 // Suppress util.isArray deprecation warning from lodash
 process.removeAllListeners('warning');
