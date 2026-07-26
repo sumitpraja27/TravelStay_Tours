@@ -1,6 +1,6 @@
 {
-  "name": "WanderLust - Travel Planner",
-  "short_name": "WanderLust",
+  "name": "TravelStay - Travel Planner",
+  "short_name": "TravelStay",
   "description": "Plan and manage your perfect trips with offline access",
   "start_url": "/",
   "display": "standalone",

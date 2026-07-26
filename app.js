@@ -60,7 +60,7 @@ const newsletterRouter = require("./routes/newsletter.js");
 const compareRoutes = require('./routes/compare'); //for comparison of listings
 const safetyRouter = require("./routes/safety.js");
 // Check for MongoDB connection string and provide a fallback for development
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = "mongodb://127.0.0.1:27017/travelstay";
 if (!process.env.ATLAS_DB_URL) {
     console.warn("⚠️ ATLAS_DB_URL environment variable is not set! Using local MongoDB fallback.");
     console.warn("ℹ️ Make sure you have MongoDB running locally or set ATLAS_DB_URL in .env file.");

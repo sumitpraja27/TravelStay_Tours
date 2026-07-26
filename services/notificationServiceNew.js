@@ -68,7 +68,7 @@ class NotificationService {
         return this.createNotification({
             recipient: userId,
             type: 'welcome',
-            title: '🎉 Welcome to WanderLust!',
+            title: '🎉 Welcome to TravelStay!',
             message: 'Welcome to our travel community! Start exploring amazing destinations and create unforgettable memories.',
             priority: 'high',
             metadata: {

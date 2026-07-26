@@ -55,5 +55,5 @@ updates:
           - "prettier*"
         update-types:
           - "major"
-          - "minor" 
+          - "minor"
           - "patch"

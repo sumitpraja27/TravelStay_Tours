@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="d-flex">
                 <div class="toast-body">
                     <i class="fa-solid fa-mobile-screen-button me-2"></i>
-                    Install WanderLust for offline access!
+                    Install TravelStay for offline access!
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>

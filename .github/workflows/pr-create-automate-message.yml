@@ -91,7 +91,7 @@ jobs:
             personalizedMessage += `- Documentation is updated (if applicable)\n\n`;
             
             // Add encouraging footer
-            personalizedMessage += `> We'll review this as soon as possible! Feel free to address any automated checks that may appear below. �\n\n`;
+            personalizedMessage += `> We'll review this as soon as possible! Feel free to address any automated checks that may appear below. 🚀\n\n`;
             personalizedMessage += `Thanks again for contributing to WanderLust! ✨`;
 
             await github.rest.issues.createComment({

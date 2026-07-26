@@ -503,7 +503,7 @@ class NotificationManager {
                 },
                 body: JSON.stringify({
                     title: 'Test Notification',
-                    message: 'This is a test notification from the WanderLust notification system!',
+                    message: 'This is a test notification from the TravelStay notification system!',
                     type: 'system_announcement'
                 })
             });
